@@ -1,5 +1,5 @@
 {
-	"languageModel" {
+	"languageModel": {
 		"intents": [
 			{
 				"name": "AMAZON.StopIntent",
