@@ -1,0 +1,36 @@
+{
+	"languageModel": {
+		"intents": [
+			{
+				"name": "AMAZON.StopIntent",
+				"samples": []
+			},
+			{
+				"name": "AMAZON.HelpIntent",
+				"samples": []
+			},
+			{
+				"name": "AnswerIntent",
+				"samples": [
+					"{Integer} point {Decimal}",
+					"The answer is {Integer} point {Decimal}",
+					"I got {Integer} point {Decimal}",
+					"Is the answer {Integer} point {Decimal}"
+				],
+				"slots": [
+					{
+						"name": "Integer",
+						"type": "AMAZON.NUMBER",
+						"samples": []
+					},
+					{
+						"name": "Decimal",
+						"type": "AMAZON.NUMBER",
+						"samples": []
+					}
+				]
+			}
+		],
+		"invocationName": "smart wake"
+	}
+}
