@@ -1,0 +1,78 @@
+{
+  "languageModel": {
+    "intents": [
+      {
+        "name": "AMAZON.CancelIntent",
+        "samples": []
+      },
+      {
+        "name": "AMAZON.HelpIntent",
+        "samples": []
+      },
+      {
+        "name": "AMAZON.PauseIntent",
+        "samples": []
+      },
+      {
+        "name": "AMAZON.ResumeIntent",
+        "samples": []
+      },
+      {
+        "name": "AMAZON.StopIntent",
+        "samples": []
+      },
+      {
+        "name": "AnswerIntent",
+        "samples": [
+          "{coeff} ex to the power of {exp}",
+          "{coeff} ex to the {exp}",
+          "{coeff} times ex to the power of {exp}",
+          "{"
+        ],
+        "slots": [
+          {
+            "name": "coeff",
+            "type": "AMAZON.NUMBER"
+          },
+          {
+          	"name": "exp",
+          	"type": "AMAZON.NUMBER"
+          },
+          {
+          	"name": "function",
+          	"type": "FUNCTION_NAMES"
+          }
+        ]
+      },
+      {
+        "name": "ProblemIntent",
+        "samples": [
+          "for a problem",
+          "to ask me a question",
+          "for a math problem",
+          "for a quiz",
+          "to quiz me"
+        ],
+        "slots": []
+      }
+    ],
+    "types": [
+    	{
+    	"name": "FUNCTION_NAMES",
+    		"values": [
+    			{
+    				"name": {
+    					"value": "cosine"
+    				},
+    				"name": {
+    					"value": "sine"
+    				},
+    				"name": {
+    					"value": "natural log"
+    				}
+    			}]
+    	}
+    ],
+    "invocationName": "smart wake"
+  }
+}
