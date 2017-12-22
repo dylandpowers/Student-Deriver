@@ -125,7 +125,7 @@ const problemHandlers = Alexa.CreateStateHandler(states.PROBLEM, {
 	},
 	"AskEasyQuestion" : function() 
 	{
-		this.attributes["exponent"] = getRandomInt(1, 10).toString();
+		this.attributes["exponent"] = getRandomInt(1, 11).toString();
 		this.attributes["coefficient"] = getRandomInt(1, 10).toString();
 		let question = "What is the derivative of " + this.attributes["coefficient"] + " <say-as interpret-as='characters'>x</say-as> to the power of " + this.attributes["exponent"] + "?";
 		let speech = this.attributes["response"] + question;
