@@ -1,5 +1,35 @@
 {
   "languageModel": {
+    "types": [
+      {
+        "name": "FUNCTION_NAMES",
+        "values": [
+          {
+            "id": null,
+            "name": {
+              "value": "cosine",
+              "synonyms": []
+            }
+          },
+          {
+            "id": null,
+            "name": {
+              "value": "sine",
+              "synonyms": []
+            }
+          },
+          {
+            "id": null,
+            "name": {
+              "value": "1 over",
+              "synonyms": [
+                "1 divided by"
+              ]
+            }
+          }
+        ]
+      }
+    ],
     "intents": [
       {
         "name": "AMAZON.CancelIntent",
@@ -27,7 +57,8 @@
           "{coeff} ex to the power of {exp}",
           "{coeff} ex to the {exp}",
           "{coeff} times ex to the power of {exp}",
-          "{"
+          "{function} ex",
+          "{function} of ex"
         ],
         "slots": [
           {
@@ -35,12 +66,12 @@
             "type": "AMAZON.NUMBER"
           },
           {
-          	"name": "exp",
-          	"type": "AMAZON.NUMBER"
+            "name": "exp",
+            "type": "AMAZON.NUMBER"
           },
           {
-          	"name": "function",
-          	"type": "FUNCTION_NAMES"
+            "name": "function",
+            "type": "FUNCTION_NAMES"
           }
         ]
       },
@@ -55,23 +86,6 @@
         ],
         "slots": []
       }
-    ],
-    "types": [
-    	{
-    	"name": "FUNCTION_NAMES",
-    		"values": [
-    			{
-    				"name": {
-    					"value": "cosine"
-    				},
-    				"name": {
-    					"value": "sine"
-    				},
-    				"name": {
-    					"value": "natural log"
-    				}
-    			}]
-    	}
     ],
     "invocationName": "smart wake"
   }
