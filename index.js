@@ -37,9 +37,9 @@ const RIGHT_ANSWER = "Great job you star! You're well on the way to a wonderful 
 const WRONG_ANSWER = "Sorry, that's not quite right. Please try again. ";
 
 const data = [
-    {func: "sine", derivative: "cosine"},
-    {func: "cosine", derivative: "negative sine"},
-    {func: "natural logarithm", derivative: "one divided by"},
+    {func: "sine", derivative: ["cosine"]},
+    {func: "cosine", derivative: ["negative sine"]},
+    {func: "natural logarithm", derivative: ["1 over", "1 divided by"]},
     // If we select this one, we will just generate a random coefficient and exponent
     {func: "x", derivative: "foo"}
 ];
@@ -111,15 +111,15 @@ const problemHandlers = Alexa.CreateStateHandler(states.PROBLEM, {
         this.attributes["response"] = START_PROBLEM;
         
         let index = getRandomInt(0, data.length-1);
-        let item = data[index];
+        const item = data[index];
         var property = item["func"];
         this.attributes["func"] = property;
+        this.attributes["derivative"] = item["derivative"];
         if (property === "x") { // If we need an exponent and a coefficient generated
             this.emitWithState("AskEasyQuestion");
         } else {  
 
             // This is the case where we need a more complex derivative
-            this.attributes["derivative"] = item["derivative"];
             this.emitWithState("AskHardQuestion"); 
         }
     },
@@ -154,8 +154,8 @@ const problemHandlers = Alexa.CreateStateHandler(states.PROBLEM, {
                 this.emit(":responseReady");
             } else {
                 this.attributes["response"] = WRONG_ANSWER;
-                this.response.speak(this.attributes["response"]);
-                this.emitWithState("AskEasyQuestion");
+                this.attributes["func"] = getNextQuestion("x");
+                this.emitWithState("AskHardQuestion"); // We know that we will always go to this handler if our current function is 'x'
             }
         } else {
             // This is the case where we are dealing with more complex derivatives
@@ -163,14 +163,15 @@ const problemHandlers = Alexa.CreateStateHandler(states.PROBLEM, {
             let answerFunc = this.event.request.intent.slots.function.value;
 
             // What Alexa should say back based upon what the answer is
-            if (answerFunc == this.attributes["derivative"]) {
+            if (checkAnswer(answerFunc, this.attributes["derivative"])) {
                 this.attributes["response"] = RIGHT_ANSWER;
                 this.response.speak(this.attributes["response"]);
                 this.emit(":responseReady");
             } else {
                 this.attributes["response"] = WRONG_ANSWER;
-                this.response.speak(this.attributes["response"]);
-                this.emitWithState("AskEasyQuestion");
+                this.attributes["func"] = getNextQuestion(this.attributes["func"]);
+                let nextHandler = this.attributes["func"] == "x" ? "AskEasyQuestion" : "AskHardQuestion";
+                this.emitWithState(nextHandler);
             }
 
         }
@@ -194,4 +195,27 @@ const problemHandlers = Alexa.CreateStateHandler(states.PROBLEM, {
 // Random integer calculation
 function getRandomInt(min, max) {
     return (Math.floor(Math.random() * (max - min + 1)) + min);
+}
+
+function getNextQuestion(oldFunc) {
+    var newFunc = oldFunc;
+
+    // The below code ensures that we get a new function (different from the previous) every time
+    while (newFunc == oldFunc) {
+        let index = getRandomInt(0, data.length - 1);
+        let item = data[index];
+        newFunc = item["func"];
+    }
+
+    return newFunc;
+}
+
+// Checks the correctness of an answer
+function checkAnswer(answerFunc, derivatives) {
+    //if (derivatives.length == 1) return answerFunc == derivatives;
+    
+    for (let i = 0; i < derivatives.length; i++) {
+        if (answerFunc ==  derivatives[i]) return true;
+    }
+    return false;
 }
