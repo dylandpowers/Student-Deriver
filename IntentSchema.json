@@ -21,9 +21,9 @@
           {
             "id": null,
             "name": {
-              "value": "1 over",
+              "value": "one over",
               "synonyms": [
-                "1 divided by"
+                "one divided by"
               ]
             }
           }
@@ -52,13 +52,11 @@
         "samples": []
       },
       {
-        "name": "AnswerIntent",
+        "name": "EasyAnswerIntent",
         "samples": [
-          "{coeff} ex to the power of {exp}",
-          "{coeff} ex to the {exp}",
-          "{coeff} times ex to the power of {exp}",
-          "{function} ex",
-          "{function} of ex"
+          "{coeff} x to the power of {exp}",
+          "{coeff} x to the {exp}",
+          "{coeff} times x to the power of {exp}",
         ],
         "slots": [
           {
@@ -69,6 +67,15 @@
             "name": "exp",
             "type": "AMAZON.NUMBER"
           },
+        ]
+      },
+      {
+        "name": "HardAnswerIntent",
+        "samples": [
+          "{function} of x",
+          "{function} x"
+        ],
+        "slots": [
           {
             "name": "function",
             "type": "FUNCTION_NAMES"
