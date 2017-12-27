@@ -137,43 +137,45 @@ const problemHandlers = Alexa.CreateStateHandler(states.PROBLEM, {
        let speech = this.attributes["response"] + question;
        this.emit(":ask", speech, question);
     },
-    "AnswerIntent" : function()
+    "EasyAnswerIntent" : function()
+    {
+        this.attributes["response"] = "";
+    
+        // Get the final answer (coefficient and exponent) from the user
+        let answerCoeff = this.event.request.intent.slots.coeff.value;
+        let answerExp = this.event.request.intent.slots.exp.value;
+
+        // What Alexa should say back based upon what the user spoke
+        if (answerCoeff == (this.attributes["exponent"]*this.attributes["coefficient"]) && answerExp == (this.attributes["exponent"] - 1)) {
+            this.attributes["response"] = RIGHT_ANSWER;
+            this.response.speak(this.attributes["response"]);
+            this.emit(":responseReady");
+        
+        } else {
+            this.attributes["response"] = WRONG_ANSWER;
+            this.attributes["func"] = getNextQuestion("x");
+            this.emitWithState("AskHardQuestion"); // We know that we will always go to this handler if our current function is 'x'
+        }
+        
+    },
+    "HardAnswerIntent": function() 
     {
         this.attributes["response"] = "";
 
-        // Case where we are dealing with a simple function
-        if (this.attributes["func"] === "x") {
-        // Get the final answer (coefficient and exponent) from the user
-            let answerCoeff = this.event.request.intent.slots.coeff.value;
-            let answerExp = this.event.request.intent.slots.exp.value;
+        // Remember that we have stored this.attributes["derivative"]
+        let answerFunc = this.event.request.intent.slots.function.value;
 
-            // What Alexa should say back based upon what the answer is
-            if (answerCoeff == (this.attributes["exponent"]*this.attributes["coefficient"]) && answerExp == (this.attributes["exponent"] - 1)) {
-                this.attributes["response"] = RIGHT_ANSWER;
-                this.response.speak(this.attributes["response"]);
-                this.emit(":responseReady");
-            } else {
-                this.attributes["response"] = WRONG_ANSWER;
-                this.attributes["func"] = getNextQuestion("x");
-                this.emitWithState("AskHardQuestion"); // We know that we will always go to this handler if our current function is 'x'
-            }
+        // What Alexa should say back based upon what the answer is
+        if (checkAnswer(answerFunc, this.attributes["derivative"])) {
+            this.attributes["response"] = RIGHT_ANSWER;
+            this.response.speak(this.attributes["response"]);
+            this.emit(":responseReady");
+
         } else {
-            // This is the case where we are dealing with more complex derivatives
-            // Remember that we have stored this.attributes["derivative"]
-            let answerFunc = this.event.request.intent.slots.function.value;
-
-            // What Alexa should say back based upon what the answer is
-            if (checkAnswer(answerFunc, this.attributes["derivative"])) {
-                this.attributes["response"] = RIGHT_ANSWER;
-                this.response.speak(this.attributes["response"]);
-                this.emit(":responseReady");
-            } else {
-                this.attributes["response"] = WRONG_ANSWER;
-                this.attributes["func"] = getNextQuestion(this.attributes["func"]);
-                let nextHandler = this.attributes["func"] == "x" ? "AskEasyQuestion" : "AskHardQuestion";
-                this.emitWithState(nextHandler);
-            }
-
+            this.attributes["response"] = WRONG_ANSWER;
+            this.attributes["func"] = getNextQuestion(this.attributes["func"]);
+            let nextHandler = this.attributes["func"] == "x" ? "AskEasyQuestion" : "AskHardQuestion";
+            this.emitWithState(nextHandler);
         }
     },
     "AMAZON.StopIntent" : function()
